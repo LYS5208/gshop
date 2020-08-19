@@ -32,7 +32,10 @@ footer, header, menu, nav, section {
 body {
   line-height: 1;
 }
-
+/* 新增 pan-y表示启用单指垂直平移手势(上下滑动事件) */
+*{
+  touch-action: pan-y;
+}
 blockquote, q {
   quotes: none;
 }

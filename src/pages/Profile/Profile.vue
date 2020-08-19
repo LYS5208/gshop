@@ -3,17 +3,17 @@
         <HeaderTop title="我的"/>
         <section class="profile-number">
           <!-- 跳转到登录页 -->
-          <router-link to='/login' class="profile-link">
+          <router-link :to="userInfo._id ? '/userinfo':'/login'" class="profile-link">
             <div class="profile_image">
               <i class="iconfont icon-person icon-geren"></i>
             </div>
             <div class="user-info">
-              <p class="user-info-top">登录/注册</p>
+              <p class="user-info-top" v-if="!userInfo.phone">{{userInfo.name|| '登录/注册'}}</p>
               <p>
                 <span class="user-icon">
                   <i class="iconfont icon-shouji icon-mobile"></i>
                 </span>
-                <span class="icon-mobile-number">暂无绑定手机号</span>
+                <span class="icon-mobile-number" else>{{userInfo.phone || '暂无绑定手机号'}}</span>
               </p>
             </div>
             <span class="arrow">
@@ -90,12 +90,35 @@
             </div>
           </a>
         </section>
+        <section class="profile_my_order border-1px">
+          <mt-button type="danger" style="width:100%" v-if="userInfo._id" @click="logout">退出登录</mt-button>
+        </section>
       </section>
 </template>
 
 <script>
 import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
+import {mapState} from 'vuex'
+import {MessageBox,Toast} from 'mint-ui'
 export default {
+    computed:{
+      ...mapState(['userInfo'])
+
+    },
+    methods:{
+      logout() {
+        MessageBox.confirm('确认退出登录？').then(
+          action=>{
+            //求退出
+            this.$store.dispatch('logout')
+            Toast('退出成功!')
+          },
+          action=>{
+            console.log('取消')
+          }
+        )
+      }
+    },
     components:{
         HeaderTop
     }
